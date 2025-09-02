@@ -12,26 +12,11 @@ on:
 
 ## the action script
 jobs:
-  pr_title:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check PR Title
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-        run: |
-          echo "Validating PR title: $PR_TITLE"
-          
-          REGEX='^(fix|release|feat|hotfix|build|test)\((ECOM-[0-9]+|JIRA-[0-9]+)\):[[:space:]]+.+$'
-          
-          echo "$PR_TITLE" | grep -P "$REGEX" > /dev/null
-          
-          if [ $? -ne 0 ]; then
-            echo "Invalid PR title format: '$PR_TITLE'"
-            echo "Required format: <type>(<scope>): task name"
-            echo "Allowed types: fix, release, feat, hotfix, build, test"
-            echo "Allowed scopes: ECOM-<num>, JIRA-<num>"
-            echo "Example: feat(ECOM-27): Add login screen"
-            exit 1
-          fi
-
-          echo "PR title format is valid!"
+      - uses: thehanimo/pr-title-checker@v1.4.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pass_on_octokit_error: false
+          configuration_path: .github/pr-title-checker-config.json

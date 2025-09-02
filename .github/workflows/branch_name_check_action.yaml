@@ -15,21 +15,12 @@ jobs:
   validate-branch-name:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate Branch Name
-        shell: bash
-        run: |
-          BRANCH_NAME="${{ github.head_ref }}"
-          echo "Branch name: $BRANCH_NAME"
-          
-          REGEX="^(feature|bugfix|hotfix|release)/ECOM-[0-9]+/[A-Za-z0-9 _-]+$"
-          
-          echo "$BRANCH_NAME" | grep -E "$REGEX" > /dev/null
-          
-          if [ $? -ne 0 ]; then
-            echo "Invalid branch name format: $BRANCH_NAME"
-            echo "Required format: <type>/ECOM-<TicketNum>/<task name>"
-            echo "Example: feature/ECOM-27/Initialize Project"
-            exit 1
-          fi
-          
-          echo "Valid branch name"
+      - uses: actions/checkout@v4
+
+      - name: Validate Branch Format
+        uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
+        with:
+          branch-name: "${{ github.ref }}"
+          trim-from-start: "refs/heads/"
+          validation-logic: "matches('^(feature|bugfix|hotfix|release)/ECOM-[0-9]+/[A-Za-z0-9 _-]+$')"
+          fail-when-not-valid: true
