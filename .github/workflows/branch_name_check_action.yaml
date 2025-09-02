@@ -12,15 +12,20 @@ on:
 
 ## the action script
 jobs:
-  validate-branch-name:
+  check-branch-name:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate Branch Format
-        uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
+      - name: Check Branch Name
+        uses: actions/github-script@v6
         with:
-          branch-name: "${{ github.head_ref }}"
-          trim-from-start: "refs/heads/"
-          validation-logic: matches("^(feature|bugfix|hotfix|release)/ECOM-[0-9]+/[A-Za-z0-9 _-]+$")
-          fail-when-not-valid: true
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const core = require('@actions/core');
+            const branchName = context.payload.pull_request.head.ref;
+            const regex = /^(feature|bugfix|hotfix|release)\/ECOM-\d+\/[\w\- ]+$/;
+
+            if (!regex.test(branchName)) {
+              core.setFailed('Branch name does not match the required format: JIRA-<NUMBER>-<desc>');
+            } else {
+              console.log('Branch name matches the required format');
+            }
