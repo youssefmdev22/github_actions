@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate Branch Name
-        env:
-          BRANCH_NAME: ${{ github.head_ref }}
+        shell: bash
         run: |
+          BRANCH_NAME="${{ github.head_ref }}"
           echo "Branch name: $BRANCH_NAME"
 
           if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|release)\/ECOM-[0-9]+\/[A-Za-z0-9 _-]+$ ]]; then
