@@ -21,7 +21,11 @@ jobs:
         run: |
           echo "Validating PR title: $PR_TITLE"
           
-          if [[ ! "$PR_TITLE" =~ ^(fix|release|feat|hotfix|build|test)\((ECOM-[0-9]+|JIRA-[0-9]+)\):\s+.+$ ]]; then
+          REGEX='^(fix|release|feat|hotfix|build|test)\((ECOM-[0-9]+|JIRA-[0-9]+)\):[[:space:]]+.+$'
+          
+          echo "$PR_TITLE" | grep -P "$REGEX" > /dev/null
+          
+          if [ $? -ne 0 ]; then
             echo "Invalid PR title format: '$PR_TITLE'"
             echo "Required format: <type>(<scope>): task name"
             echo "Allowed types: fix, release, feat, hotfix, build, test"
@@ -29,5 +33,5 @@ jobs:
             echo "Example: feat(ECOM-27): Add login screen"
             exit 1
           fi
-          
+
           echo "PR title format is valid!"
