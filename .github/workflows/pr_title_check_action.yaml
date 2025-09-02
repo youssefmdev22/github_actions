@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "Validating PR title: $PR_TITLE"
           
-          if [[ ! "$PR_TITLE" =~ ^(fix|release|feat|hotfix|build|test)\((ECOM-[0-9]+|JIRA-[0-9]+)\):\s.+$ ]]; then
+          if [[ ! "$PR_TITLE" =~ ^(fix|release|feat|hotfix|build|test)\((ECOM-[0-9]+|JIRA-[0-9]+)\):\s+.+$ ]]; then
             echo "Invalid PR title format: '$PR_TITLE'"
             echo "Required format: <type>(<scope>): task name"
             echo "Allowed types: fix, release, feat, hotfix, build, test"
