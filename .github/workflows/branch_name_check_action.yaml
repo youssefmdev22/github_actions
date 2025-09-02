@@ -22,5 +22,5 @@ jobs:
         with:
           branch-name: "${{ github.ref }}"
           trim-from-start: "refs/heads/"
-          validation-logic: "matches('^(feature|bugfix|hotfix|release)/ECOM-[0-9]+/[A-Za-z0-9 _-]+$')"
+          validation-logic: matches("^(feature|bugfix|hotfix|release)/ECOM-[0-9]+/[A-Za-z0-9 _-]+$")
           fail-when-not-valid: true
