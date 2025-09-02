@@ -4,7 +4,11 @@ name: Flutter Unit Testing Action
 ## when will the action trigger
 on:
   pull_request:
-  push:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
 
 ## the action script
 jobs:
