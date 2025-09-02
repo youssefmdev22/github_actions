@@ -20,7 +20,7 @@ jobs:
       - name: Validate Branch Format
         uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
         with:
-          branch-name: "${{ github.ref }}"
+          branch-name: "${{ github.head_ref }}"
           trim-from-start: "refs/heads/"
           validation-logic: matches("^(feature|bugfix|hotfix|release)/ECOM-[0-9]+/[A-Za-z0-9 _-]+$")
           fail-when-not-valid: true
