@@ -1,0 +1,30 @@
+## name of your github action
+name: Branch Name Action
+
+## when will the action trigger
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+## the action script
+jobs:
+  validate-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Branch Name
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          echo "Branch name: $BRANCH_NAME"
+
+          if [[ ! "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix|release)\/ECOM-[0-9]+\/[A-Za-z0-9 _-]+$ ]]; then
+            echo "Invalid branch name format: $BRANCH_NAME"
+            echo "Required format: <type>/ECOM-<TicketNum>/<task name>"
+            echo "Example: feature/ECOM-27/Initialize Project"
+            exit 1
+          fi
+
+          echo "Valid branch name"

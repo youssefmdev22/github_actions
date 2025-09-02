@@ -1,0 +1,33 @@
+## name of your github action
+name: PR Title Action
+
+## when will the action trigger
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+## the action script
+jobs:
+  pr_title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "Validating PR title: $PR_TITLE"
+          
+          if [[ ! "$PR_TITLE" =~ ^(fix|release|feat|hotfix|build|test)\((ECOM-[0-9]+|JIRA-[0-9]+)\):\s.+$ ]]; then
+            echo "Invalid PR title format: '$PR_TITLE'"
+            echo "Required format: <type>(<scope>): task name"
+            echo "Allowed types: fix, release, feat, hotfix, build, test"
+            echo "Allowed scopes: ECOM-<num>, JIRA-<num>"
+            echo "Example: feat(ECOM-27): Add login screen"
+            exit 1
+          fi
+          
+          echo "PR title format is valid!"

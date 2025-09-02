@@ -5,15 +5,10 @@ name: Flutter Unit Testing Action
 on:
   pull_request:
   push:
-    branches:
-      - main
-      - development
-      - release/*
-      - feature/*
 
 ## the action script
 jobs:
-  main:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
