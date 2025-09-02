@@ -12,20 +12,16 @@ on:
 
 ## the action script
 jobs:
-  check-branch-name:
+  Validate_Branch:
+    name: Validator Branch
     runs-on: ubuntu-latest
     steps:
-      - name: Check Branch Name
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const core = require('@actions/core');
-            const branchName = context.payload.pull_request.head.ref;
-            const regex = /^(feature|bugfix|hotfix|release)\/ECOM-\d+\/[\w\- ]+$/;
+      - uses: actions/checkout@v4
 
-            if (!regex.test(branchName)) {
-              core.setFailed('Branch name does not match the required format: JIRA-<NUMBER>-<desc>');
-            } else {
-              console.log('Branch name matches the required format');
-            }
+      - name: Validate Branch
+        uses: KinsonDigital/BranchValidator@v1.0.0-preview.4 # Make sure this is the latest version
+        with:
+          branch-name: "${{ github.ref }}" # The current branch where the workflow is running.
+          validation-logic: "equalTo('feature/#-*') && equalTo('bugfix/#-*') && equalTo('hotfix/#-*') && equalTo('release/#-*')"
+          trim-from-start: "refs/heads/"
+          fail-when-not-valid: true
