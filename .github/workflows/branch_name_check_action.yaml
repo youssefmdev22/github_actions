@@ -22,6 +22,6 @@ jobs:
         uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
         with:
           branch-name: "${{ github.head_ref }}"
-          validation-logic: "matches('^(feature|bugfix|hotfix|release)/[A-Z]+-[0-9]+(/.+)?$')"
+          validation-logic: matches('^(feature|bugfix|hotfix|release)/[A-Z]+-[0-9]+(/.+)?$')
           trim-from-start: ""
           fail-when-not-valid: true
